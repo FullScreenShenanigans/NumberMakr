@@ -27,7 +27,7 @@ interface INumberMakrSettings {
  * Matsumoto (1997 - 2002).
  * 
  * For the 2010 code, see https://gist.github.com/banksean/300494.
- *
+ * 
  * @author "Josh Goldberg" <josh@fullscreenmario.com>
  */
 /*
@@ -96,31 +96,31 @@ interface INumberMakrSettings {
 class NumberMakr {
     // Number length of the state vector
     private stateLength: number;
-        
+
     // Number period
     private statePeriod: number;
-        
+
     // Constant vector a
     private matrixA: number;
 
     // Constant magic array from matrixA
     private matrixAMagic: number[];
-        
+
     // Most significant w-r bits
     private maskUpper: number;
-        
+
     // Least significant r bits
     private maskLower: number;
-        
+
     // Array for the state vector
     private stateVector: number[];
-        
+
     // Number for place in state vector (if out of range, uninitialised)
     private stateIndex: number;
-        
+
     // The starting seed used to initialize.
     private seed: number | number[];
-    
+
     /**
      * Resets the NumberMakr.
      * 
@@ -154,7 +154,7 @@ class NumberMakr {
 
     /* Simple gets
     */
-    
+
     /**
      * @return {Mixed} The starting seed used to initialize.
      */
@@ -196,7 +196,7 @@ class NumberMakr {
     getMaskLower(): number {
         return this.maskLower;
     }
-    
+
 
     /* Resets
     */
@@ -206,8 +206,8 @@ class NumberMakr {
      * 
      * @param {Number} [seedNew]   Defaults to the previously set seed.
      */
-    resetFromSeed(seedNew: number | number[] = 0) {
-        var s;
+    resetFromSeed(seedNew: number | number[] = 0): void {
+        var s: number;
 
         this.stateVector[0] = <number>seedNew >>> 0;
 
@@ -222,7 +222,7 @@ class NumberMakr {
 
         this.seed = seedNew;
     }
-    
+
     /**
      * Initializes state from an Array.
      * 
@@ -231,7 +231,7 @@ class NumberMakr {
      *                                actual keyInitial.length).
      * @remarks   There was a slight change for C++, 2004/2/26.
      */
-    resetFromArray(keyInitial: number[], keyLength: number = keyInitial.length) {
+    resetFromArray(keyInitial: number[], keyLength: number = keyInitial.length): void {
         var i: number = 1,
             j: number = 0,
             k: number,
@@ -285,11 +285,11 @@ class NumberMakr {
         this.stateVector[0] = 0x80000000;
         this.seed = keyInitial;
     }
-    
-    
+
+
     /* Random number generation
     */
-    
+
     /**
      * @return {Number} Random Number in [0,0xffffffff].
      */
@@ -339,7 +339,7 @@ class NumberMakr {
 
         return y >>> 0;
     }
-    
+
     /**
      * @return {Number} Random number in [0,1).
      * @remarks Divided by 2^32.
@@ -347,18 +347,18 @@ class NumberMakr {
     random(): number {
         return this.randomInt32() * (1.0 / 4294967296.0);
     }
-    
+
     /**
      * @return {Number} Random Number in [0,0x7fffffff].
      */
     randomInt31(): number {
         return this.randomInt32() >>> 1;
     }
-    
-    
+
+
     /* Real number generators (due to Isaku Wada, 2002/01/09)
     */
-    
+
     /**
      * @return {Number} Random real Number in [0,1].
      * @remarks Divided by 2 ^ 32 - 1.
@@ -366,7 +366,7 @@ class NumberMakr {
     randomReal1(): number {
         return this.randomInt32() * (1.0 / 4294967295.0);
     }
-    
+
     /**
      * @return {Number} Random real Number in (0,1).
      * @remarks Divided by 2 ^ 32.
@@ -374,29 +374,29 @@ class NumberMakr {
     randomReal3(): number {
         return (this.randomInt32() + 0.5) * (1.0 / 4294967296.0);
     }
-    
+
     /**
      * @return {Number} Random real Number in [0,1) with 53-bit resolution.
      */
     randomReal53Bit(): number {
-        var a = this.randomInt32() >>> 5,
-            b = this.randomInt32() >>> 6;
+        var a: number = this.randomInt32() >>> 5,
+            b: number = this.randomInt32() >>> 6;
 
         return (a * 67108864.0 + b) * (1.0 / 9007199254740992.0);
     }
-    
-    
+
+
     /* Ranged Number generators
     */
-    
+
     /**
      * @param {Number} max
      * @return {Number} Random Number in [0,max).
      */
-    randomUnder = function (max: number): number {
+    randomUnder(max: number): number {
         return this.random() * max;
     }
-    
+
     /**
      * @param {Number} min
      * @param {Number} max
@@ -405,11 +405,11 @@ class NumberMakr {
     randomWithin(min: number, max: number): number {
         return this.randomUnder(max - min) + min;
     }
-    
-    
+
+
     /* Ranged integer generators
     */
-    
+
     /**
      * @param {Number} max
      * @return {Number} Random integer in [0,max).
@@ -417,7 +417,7 @@ class NumberMakr {
     randomInt(max: number): number {
         return this.randomUnder(max) | 0;
     }
-    
+
     /**
      * @param {Number} min
      * @param {Number} max
@@ -426,7 +426,7 @@ class NumberMakr {
     randomIntWithin(min: number, max: number): number {
         return (this.randomUnder(max - min) + min) | 0;
     }
-    
+
     /**
      * @return {Boolean} Either true or false, with 50% probability of each.
      */

@@ -9,6 +9,34 @@ var numTries = 350,
     maskLower = 0x6fffffff,
     NumberMaker;
 
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
+// mocha-phantomjs doesn't yet have Phantom 2.X, so an older version of Phantom
+// is being used that is on an older version of Qt, which isn't fully ES5.
+// In the meantime...
+if (!Function.prototype.bind) {
+    Function.prototype.bind = function (oThis) {
+        if (typeof this !== 'function') {
+            // closest thing possible to the ECMAScript 5 internal IsCallable function
+            throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+        }
+
+        var aArgs = Array.prototype.slice.call(arguments, 1),
+            fToBind = this,
+            fNOP = function () { },
+            fBound = function () {
+                return fToBind.apply(this instanceof fNOP
+                       ? this
+                       : oThis,
+                       aArgs.concat(Array.prototype.slice.call(arguments)));
+            };
+
+        fNOP.prototype = this.prototype;
+        fBound.prototype = new fNOP();
+
+        return fBound;
+    };
+}
+
 function tryMany(callback) {
     for (i = 0; i < numTries; i += 1) {
         callback(i, numTries);
@@ -53,7 +81,7 @@ function curryItBoolean(method, expected) {
     var args = [].slice.call(arguments, 2),
         numTrue = 0,
         actual;
-    
+
     it(method, function () {
         for (i = 0; i < numTriesBoolean; i += 1) {
             if (NumberMaker[method].apply(NumberMaker, args)) {
