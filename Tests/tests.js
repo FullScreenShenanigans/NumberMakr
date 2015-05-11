@@ -1,5 +1,6 @@
 var numTries = 350,
     numTriesBoolean = numTries * 2,
+    numTriesEquality = 7,
     epsilon = .05,
     seed = new Date().getTime(),
     stateLength = 700,
@@ -97,6 +98,28 @@ function curryItBoolean(method, expected) {
     });
 }
 
+function curryEquality(description, method, seed) {
+    var args = [].slice.call(arguments, 2),
+        NumberMaker = new NumberMakr({
+            "seed": seed
+        }),
+        numberOld, numberNew;
+
+    numberOld = NumberMaker[method].apply(NumberMaker, args);
+
+    it(description, function () {
+        for (i = 0; i < numTriesEquality; i += 1) {
+            NumberMaker = new NumberMakr({
+                "seed": seed
+            }),
+            numberNew = NumberMaker[method].apply(NumberMaker, args);
+
+            chai.expect(numberNew).to.be.equal(numberOld);
+            numberOld = numberNew;
+        }
+    });
+}
+
 describe("constructor", function () {
     it("takes settings", function () {
         NumberMaker = new NumberMakr({
@@ -154,4 +177,11 @@ describe("generation", function () {
     curryItBoolean("randomBooleanFraction", 3 / 7, 3, 7);
     curryIt("randomArrayIndex", 0, 7, [0, 0, 0, 0, 0, 0, 0]);
     curryIt("randomArrayMember", 7, 14, [7, 8, 9, 10, 11, 12, 13]);
+});
+
+describe("state", function () {
+    curryEquality("random from number", "random", 777);
+    curryEquality("randomfrom number[]", "random", [35, 49, 77]);
+    curryEquality("randomInt32 from number", "randomInt32", 777);
+    curryEquality("randomInt32 from number[]", "randomInt32", [35, 49, 77]);
 });
