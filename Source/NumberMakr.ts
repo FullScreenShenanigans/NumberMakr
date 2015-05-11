@@ -150,6 +150,10 @@ class NumberMakr {
 
         this.resetFromSeed(settings.seed || new Date().getTime());
     }
+
+
+    /* Simple gets
+    */
     
     /**
      * @return {Mixed} The starting seed used to initialize.
@@ -157,7 +161,46 @@ class NumberMakr {
     getSeed(): number | number[] {
         return this.seed;
     }
+
+    /**
+     * @return {Number} THe length of the state vector.
+     */
+    getStateLength(): number {
+        return this.stateLength;
+    }
+
+    /**
+     * @return {Number} THe length of the state vector.
+     */
+    getStatePeriod(): number {
+        return this.statePeriod;
+    }
+
+    /**
+     * @return {Number} THe length of the state vector.
+     */
+    getMatrixA(): number {
+        return this.matrixA;
+    }
+
+    /**
+     * @return {Number} THe length of the state vector.
+     */
+    getMaskUpper(): number {
+        return this.maskUpper;
+    }
+
+    /**
+     * @return {Number} THe length of the state vector.
+     */
+    getMaskLower(): number {
+        return this.maskLower;
+    }
     
+
+    /* Resets
+    */
+
     /**
      * Initializes state from a Number.
      * 
