@@ -323,7 +323,7 @@ class NumberMakr {
             y = (this.stateVector[this.stateLength - 1] & this.maskUpper)
             | (this.stateVector[0] & this.maskLower);
 
-            this.stateVector[stateLength - 1] = this.stateVector[this.statePeriod - 1]
+            this.stateVector[this.stateLength - 1] = this.stateVector[this.statePeriod - 1]
             ^ (y >>> 1) ^ this.matrixAMagic[y & 0x1];
 
             this.stateIndex = 0;
