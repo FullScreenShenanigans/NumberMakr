@@ -1,37 +1,14 @@
+/// <reference path="NumberMakr.d.ts" />
+
 module NumberMakr {
     "use strict";
 
-    export interface INumberMakrSettings {
-        // A starting seed used to initialize. This can be a Number or Array; the
-        // appropriate resetFrom Function will be called.
-        seed?: number | number[];
-
-        // How long the state vector will be.
-        stateLength?: number;
-
-        // How long the state period will be.
-        statePeriod?: number;
-
-        // A constant mask to generate the matrixAMagic Array of [0, some number].
-        matrixA?: number;
-
-        // An upper mask to binary-and on (the most significant w-r bits).
-        maskUpper?: number;
-
-        // A lower mask to binary-and on (the least significant r bits).
-        maskLower?: number;
-    }
-
     /**
-     * NumberMakr.js
-     * 
      * An updated version of the traditional MersenneTwister JavaScript class by 
      * Sean McCullough (2010), based on code by Takuji Nishimura and Makoto 
      * Matsumoto (1997 - 2002).
      * 
      * For the 2010 code, see https://gist.github.com/banksean/300494.
-     * 
-     * @author "Josh Goldberg" <josh@fullscreenmario.com>
      */
     /*
       I've wrapped Makoto Matsumoto and Takuji Nishimura's code in a namespace
@@ -96,7 +73,7 @@ module NumberMakr {
        http://www.math.sci.hiroshima-u.ac.jp/~statePeriod-mat/stateVector/emt.html
        email: statePeriod-mat @ math.sci.hiroshima-u.ac.jp (remove space)
     */
-    export class NumberMakr {
+    export class NumberMakr implements INumberMakr {
         // Number length of the state vector
         private stateLength: number;
 
@@ -474,6 +451,5 @@ module NumberMakr {
         randomArrayMember(array: any[]): any {
             return array[this.randomArrayIndex(array)];
         }
-
     }
 }
